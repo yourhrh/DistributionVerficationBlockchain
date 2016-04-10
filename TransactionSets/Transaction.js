@@ -1,3 +1,4 @@
+'use strict'
 class Transaction{
 	constructor(publicKey,time,app,parameters){
 		this.publicKey = publicKey
