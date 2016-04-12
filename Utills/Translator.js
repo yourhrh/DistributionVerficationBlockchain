@@ -33,7 +33,7 @@ class Translator{
 		//string to bufferOBj 
 		var publicKey = new Buffer(JSON.parse(msg.publicKey))
 		var encryptedMsg = new Buffer(JSON.parse(msg.encryptedMsg))
-
+		
 		var decryptedMsg = ObjUtills.decrypt(encryptedMsg,publicKey)
 		var unserializeObj = ObjUtills.deserialize(decryptedMsg);
 		unserializeObj.publicKey  = publicKey

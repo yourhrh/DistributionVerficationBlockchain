@@ -1,6 +1,7 @@
 'use strict'
 class Transaction{
 	constructor(publicKey,time,app,parameters){
+		this.type = 'Transaction'
 		this.publicKey = publicKey
 		this.time = time
 		this.app = app
