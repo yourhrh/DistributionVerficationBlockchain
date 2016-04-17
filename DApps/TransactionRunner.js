@@ -5,7 +5,7 @@ class TransactionRunner{
 		this.index = index
 		this.dbContoller= new AppDBController(index)
 	}
-	timeInit(){
+	initTime(){
 		this.start = Math.floor(new Date().getTime() / 1000)
 		this.end = Math.floor(new Date().getTime() / 1000)
 	}

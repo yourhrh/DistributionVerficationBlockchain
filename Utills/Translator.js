@@ -8,7 +8,7 @@ function objPublicKeytoJson(obj,callback){
 
 class Translator{
 	constructor(){
-
+		
 	}
 
 	objToMsg(obj,privateKey,callback){

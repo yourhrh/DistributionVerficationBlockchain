@@ -1,3 +1,3 @@
-module.exports = function(publicKey,parameter,callback){
+module.exports = function(publicKey,parameter,dbContoller,callback){
 	callback(true)
 }
