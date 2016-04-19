@@ -23,7 +23,9 @@ class Translator{
 			// 반환 오브젝트 
 			var completeMsg = new Object()
 			completeMsg.publicKey = publicKey
+			console.log('public Key :' + publicKey)
 			completeMsg.encryptedMsg = JSON.stringify(encryptedMsg)
+			console.log('completeMsg : '+ JSON.stringify(completeMsg))
 
 			callback(completeMsg)
 		})

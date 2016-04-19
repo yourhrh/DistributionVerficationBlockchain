@@ -10,7 +10,7 @@ var Transaction = require('../TransactionSets/Transaction')
 var AppDBController = require('../DApps/AppDBController')
 var globalOplogs
 describe('Transaction Running Test\n', function() {
-	it('\tObj can translate Msg and Must recovery Obj\n ', function(done) {
+	it('Obj can translate Msg and Must recovery Obj\n ', function(done) {
 		var translator = new Translator()
 		//parameters
 
@@ -18,12 +18,11 @@ describe('Transaction Running Test\n', function() {
 		//거꾸로 해야 ecdh모듈에서 인식한다 
 		var publicKey = keySet.privateKey
 		var privateKey = keySet.publicKey
-		var time = Math.floor(new Date().getTime() / 1000)
 		var app = 'insert'
 		var parameters = 22
 
 		//트랜잭션 을 Msg로 바꾼것과 다시 복구해서 바꾼것이 같으면 같다고 가정 
-		var testTransaction = new Transaction(publicKey,time,app,parameters)
+		var testTransaction = new Transaction(publicKey,app,parameters)
 
 		translator.objToMsg(testTransaction,privateKey,function(transactionMsg){
 			//transactionMSg
@@ -37,10 +36,10 @@ describe('Transaction Running Test\n', function() {
 			})
 		}) 
 	})
-	it('\tTransactionRunner Must do all Transactions \n', function(done) {
+	it('TransactionRunner Must do all Transactions \n', function(done) {
 		var transactionRunner = new TransactionRunner(0)
 		var transactions = range(0,10).map(function(insertNum){
-			return new Transaction(keySet.publicKey,Math.floor(new Date().getTime() / 1000),
+			return new Transaction(keySet.publicKey,
 				'insert',insertNum)
 		})
 		//시간 초기화 
@@ -58,7 +57,7 @@ describe('Transaction Running Test\n', function() {
 			done()
 		})
 	});
-	it('\tAppDB do correct & make oplog \n', function(done) {
+	it('AppDB do correct & make oplog \n', function(done) {
 		initMongoClient()
 		var dbController = new AppDBController(0)
 		var start = Math.floor(new Date().getTime() / 1000)
@@ -92,7 +91,7 @@ describe('Transaction Running Test\n', function() {
 		})
 		
 	});
-	it('\toplog must can recover\n', function(done) {
+	it('oplog must can recover\n', function(done) {
 		initMongoClient()
 		var obj = new Object()
 		var dbController = new AppDBController(0)
@@ -103,6 +102,7 @@ describe('Transaction Running Test\n', function() {
 			console.log(transactionMsg)
 			translator.msgToObj(transactionMsg,function(recovery){
 				console.log(recovery)
+				done()
 			})
 		})
 		
@@ -117,7 +117,6 @@ function initMongoClient(callback){
     mongoClient.connect('mongodb://localhost/BlockchainApplicationDatabase', function (err, db){
         db.collection('plus', function (err, collection) {
             collection.remove({}, function (err, doc) {
-                callback();
             });
         });
         
