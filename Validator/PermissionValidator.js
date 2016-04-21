@@ -22,4 +22,4 @@ class PermissionValidator{
 	}
 }
 
-module.exports = permissionValidate
+module.exports = PermissionValidator

@@ -4,7 +4,7 @@ class Validators{
 	construtor(){
 		this.validators = []
 		for(var i = 0 ; i<10;i++){
-			(function(j)){
+			(function(j){
 				validators.push(new Validator(j))
 			})(i)
 		}

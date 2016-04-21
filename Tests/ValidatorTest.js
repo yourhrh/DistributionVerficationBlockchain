@@ -5,7 +5,9 @@ var Translator = require('../Utills/Translator')
 var expect = require('chai').expect
 var ProposalMaker = require('../Validator/ProposalMaker')
 var TransactionSets = require('../TransactionSets/TransactionSets')
+var Transaction = require('../TransactionSets/Transaction')
 var Validator = require('../Validator/Validator')
+var Range = require('../Utills/Range')
 describe('Validators Test\n', function() {
 
 	it('BlockController can make Block & can get That \n ', function(done){
@@ -46,18 +48,20 @@ describe('Validators Test\n', function() {
 		done()
 	})
 	it('can make Proposal & validate that is true', function(done) {
-		var transactionSet = TrasnactionSets.get(0)
+		var transactionSet = TransactionSets(0)
 		var validator = new Validator(0)
-		for(var i=0;i<10;i++){
-			function(j){
-				transactionSet.add(new Transaction(keySet.publicKey,'insert',j))
-			}(i)
-		}
-		var proposalMaker = new ProposalMaker()
+		var transactions = Range(0,10).map(function(value){
+			return new Transaction(keySet.publicKey,'insert',value)
+		})
+		transactionSet.addAll(transactions)
+		
+		var proposalMaker = new ProposalMaker(0,keySet.privateKey)
 		proposalMaker.makeProposal(function(proposal){
+			//expect(proposal.oplogs.length).to.equal(10)
+			expect(proposal.transactions.length).to.equal(10)
 			validator.validateProposal(proposal,function(result){
-				expect(result).to.not.equal(false)
-				
+				expect(result).to.equal(true)
+				done()
 			})
 		})
 	});
