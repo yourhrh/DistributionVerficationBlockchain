@@ -1,14 +1,18 @@
 'use strict'
 var TransactionRunner = require('../DApps/TransactionRunner')
+var ProposalMaker  = require('./ProposalMaker')
 class Validator{
-	construtor(chainNum){
+	constructor(chainNum,publicKey){
+		console.log('construtor')
+		this.publicKey = publicKey
 		this.chainNum = chainNum
+		this.transactionRunner = new TransactionRunner(this.chainNum)
+		this.proposalMaker = new ProposalMaker(this.chainNum,this.publicKey,this.transactionRunner)
+		console.log('validator : ' + this.publicKey + this.chainNum+ this.transactionRunner+ this.proposalMaker)
 	}
 	validateProposal(proposal,callback){
-		var transactionRunner = new TransactionRunner(this.chainNum)
 		//transactionRunner.initTime()
-		proposal.transactions
-		transactionRunner.runAll(proposal.transactions,function(done){
+		this.transactionRunner.runAll(proposal.transactions,function(done){
 			if(done){
 				callback(true)
 				/* todo make complete

@@ -2,17 +2,16 @@
 
 var TransactionSets = require('../TransactionSets/TransactionSets')
 var TransactionRunner = require('../DApps/TransactionRunner')
-class ProposalMaker{
-	constructor(index,publicKey,transactionRunner){
-		this.index = index
-		this.publicKey = publicKey
-		this.transactionRunner = transactionRunner
-		console.log('proposal maker maked')
+
+class ProposalManager{
+	constructor(index){
+		this.index= index
+		this.transactionRunner = new TransactionRunner(index)
+		this.TransactionSet = TransactionSets(index)
 	}
-	makeProposal(callback){
+	makeProposal(){
 		console.log(this.index)
-		var transactionSet = TransactionSets(this.index)
-		var unusedTransactions = transactionSet.getUnused()
+		var unusedTransactions = TransactionSet.getUnused()
 		var transactionRunner = this.transactionRunner
 		//init time before transaction do
 		transactionRunner.initTime()
@@ -55,8 +54,21 @@ class ProposalMaker{
 			console.log('promise err is : ' + err)
 			callback(false)
 		})
+	}
+	validateProposal(proposal,callback){
+		//transactionRunner.initTime()
+		this.transactionRunner.runAll(proposal.transactions,function(done){
+			if(done){
+				callback(true)
+				/* todo make complete
+				transactionRunner.getOplogs(function(oplogs){
+					compareOplogs(oplogs,proposal.oplogs,function(compare){
+						callback(compare)
+					})
+				})
+				*/
 
-		
+			}
+		})
 	}
 }
-module.exports = ProposalMaker

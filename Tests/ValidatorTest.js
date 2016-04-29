@@ -49,14 +49,13 @@ describe('Validators Test\n', function() {
 	})
 	it('can make Proposal & validate that is true', function(done) {
 		var transactionSet = TransactionSets(0)
-		var validator = new Validator(0)
+		var validator = new Validator(0,keySet.privateKey)
 		var transactions = Range(0,10).map(function(value){
 			return new Transaction(keySet.publicKey,'insert',value)
 		})
 		transactionSet.addAll(transactions)
 		
-		var proposalMaker = new ProposalMaker(0,keySet.privateKey)
-		proposalMaker.makeProposal(function(proposal){
+		validator.proposalMaker.makeProposal(function(proposal){
 			//expect(proposal.oplogs.length).to.equal(10)
 			expect(proposal.transactions.length).to.equal(10)
 			validator.validateProposal(proposal,function(result){
@@ -65,4 +64,11 @@ describe('Validators Test\n', function() {
 			})
 		})
 	});
+	it('',function(done){
+
+	})
+	it('', function(done) {
+		
+	});
+
 })  
