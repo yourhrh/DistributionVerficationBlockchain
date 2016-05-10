@@ -4,14 +4,15 @@ var TransactionSets = require('../TransactionSets/TransactionSets')
 var TransactionRunner = require('../DApps/TransactionRunner')
 
 class ProposalManager{
-	constructor(index){
+	constructor(index,publicKey){
 		this.index= index
+		this.publicKey = publicKey
 		this.transactionRunner = new TransactionRunner(index)
 		this.TransactionSet = TransactionSets(index)
 	}
-	makeProposal(){
+	makeProposal(callback){
 		console.log(this.index)
-		var unusedTransactions = TransactionSet.getUnused()
+		var unusedTransactions = this.TransactionSet.getUnused()
 		var transactionRunner = this.transactionRunner
 		//init time before transaction do
 		transactionRunner.initTime()
@@ -72,3 +73,4 @@ class ProposalManager{
 		})
 	}
 }
+module.exports = ProposalManager

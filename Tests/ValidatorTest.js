@@ -8,8 +8,14 @@ var TransactionSets = require('../TransactionSets/TransactionSets')
 var Transaction = require('../TransactionSets/Transaction')
 var Validator = require('../Validator/Validator')
 var Range = require('../Utills/Range')
-describe('Validators Test\n', function() {
+var translator = require('../Utills/Translator')
+var VoteManager = require('../Validator/VoteManager')
+var CommitManager = require('../Validator/CommitManager')
+var ProposalManager = require('../Validator/ProposalManager')
 
+describe('Validators Test\n', function() {
+	var sharedProposal 
+	var sharedVote
 	it('BlockController can make Block & can get That \n ', function(done){
 		var blockController = new BlockController(0)
 		var translator = new Translator()
@@ -49,26 +55,43 @@ describe('Validators Test\n', function() {
 	})
 	it('can make Proposal & validate that is true', function(done) {
 		var transactionSet = TransactionSets(0)
-		var validator = new Validator(0,keySet.privateKey)
+		var proposalManager = new ProposalManager(0,keySet)
 		var transactions = Range(0,10).map(function(value){
 			return new Transaction(keySet.publicKey,'insert',value)
 		})
 		transactionSet.addAll(transactions)
 		
-		validator.proposalMaker.makeProposal(function(proposal){
-			//expect(proposal.oplogs.length).to.equal(10)
+		proposalManager.makeProposal(function(proposal){
+			sharedProposal = proposal
 			expect(proposal.transactions.length).to.equal(10)
-			validator.validateProposal(proposal,function(result){
+			proposalManager.validateProposal(proposal,function(result){
 				expect(result).to.equal(true)
 				done()
 			})
 		})
 	});
-	it('',function(done){
+	it('Make Vote & Can Count That',function(done){
+
+		var voteManager = new VoteManager(0,keySet)
+		voteManager.makeVote(proposal,function(vote){
+			VoteManager.addVote(vote,function(votes){
+				var sharedVote = votes
+				expect(1).to.equal(votes.length)
+				expect(vote).to.equal(votes[0])
+			})
+		})
+
 
 	})
-	it('', function(done) {
-		
+	it('can Make Commit & ', function(done) {
+		var commitManager = new CommitManager(0,keySet)
+		commitManager.makeCommit(sharedProposal,sharedVote,function(commit){
+			expect(commit.votes).to.equal(vote)
+			expect(commit.proposal).to.equal(proposal)
+			commitManager.validatorCommit(commit,function(result){
+				expect(result).not.to.equal(false)
+			})
+		})
 	});
 
-})  
+})  	
