@@ -71,13 +71,13 @@ describe('Validators Test\n', function() {
 		})
 	});
 	it('Make Vote & Can Count That',function(done){
-
 		var voteManager = new VoteManager(0,keySet)
-		voteManager.makeVote(proposal,function(vote){
-			VoteManager.addVote(vote,function(votes){
+		voteManager.makeVote(sharedProposal,function(vote){
+			voteManager.addVote(vote,function(votes){
 				var sharedVote = votes
 				expect(1).to.equal(votes.length)
 				expect(vote).to.equal(votes[0])
+				done()
 			})
 		})
 
